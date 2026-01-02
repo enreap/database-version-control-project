@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+
+    <changeSet id="003-create-procedures" author="dev">
+        <sqlFile path="../sql/proc_create_users.sql"/>
+        <sqlFile path="../sql/proc_update_orders.sql"/>
+        <sqlFile path="../sql/proc_cleanup.sql"/>
+
+        <rollback>
+            <sql>DROP PROCEDURE IF EXISTS create_users;</sql>
+            <sql>DROP PROCEDURE IF EXISTS update_orders;</sql>
+            <sql>DROP PROCEDURE IF EXISTS cleanup;</sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
