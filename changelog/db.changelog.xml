@@ -1,0 +1,52 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
+
+    <!-- Create db1 and user -->
+    <changeSet id="001-create-db1" author="dev">
+        <sql>
+            CREATE DATABASE IF NOT EXISTS db1;
+            CREATE USER IF NOT EXISTS 'database1'@'%' IDENTIFIED BY 'Db1@123';
+            GRANT ALL PRIVILEGES ON db1.* TO 'database1'@'%';
+            FLUSH PRIVILEGES;
+        </sql>
+        <rollback>
+            DROP USER IF EXISTS 'database1'@'%';
+            DROP DATABASE IF EXISTS db1;
+        </rollback>
+    </changeSet>
+
+    <!-- Create db2 and user -->
+    <changeSet id="002-create-db2" author="dev">
+        <sql>
+            CREATE DATABASE IF NOT EXISTS db2;
+            CREATE USER IF NOT EXISTS 'database2'@'%' IDENTIFIED BY 'Db2@123';
+            GRANT ALL PRIVILEGES ON db2.* TO 'database2'@'%';
+            FLUSH PRIVILEGES;
+        </sql>
+        <rollback>
+            DROP USER IF EXISTS 'database2'@'%';
+            DROP DATABASE IF EXISTS db2;
+        </rollback>
+    </changeSet>
+
+    <!-- Execute external SQL for tables and initial data -->
+    <changeSet id="003-db1-tables" author="dev">
+        <sqlFile path="../sql/db1/create_tables.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="004-db2-tables" author="dev">
+        <sqlFile path="../sql/db2/create_tables.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <!-- Execute external SQL to update some table data -->
+    <changeSet id="005-db1-update-data" author="dev">
+        <sqlFile path="../sql/db1/update_data.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="006-db2-update-data" author="dev">
+        <sqlFile path="../sql/db2/update_data.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>
