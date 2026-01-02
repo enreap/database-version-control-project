@@ -1,24 +1,72 @@
 pipeline {
     agent any
 
+    environment {
+        GIT_REPO_URL = 'https://github.com/enreap/mysql-jenkins-liquibase.git'
+        BRANCH_NAME  = 'main'
+
+        // Jenkins tool configurations
+        MAVEN_HOME = tool 'maven'
+        JAVA_HOME  = tool 'jdk-21'
+        LIQUIBASE_HOME = '/opt/liquibase'
+
+        // MySQL JDBC Driver
+        JDBC_DRIVER = '/opt/liquibase/lib/mysql-connector-j-9.4.0.jar'
+
+        // ✅ Use PRIVATE IP + recommended JDBC params
+        DB_URL = 'jdbc:mysql://172.31.29.235:3306/jenkins_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC'
+
+        DB_USER = 'myuser'
+        DB_PASSWORD = 'MyP@ssw0rd123'
+
+        // Liquibase changelogs
+        CHANGELOG_FILE = 'changelog/db.changelog.xml'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/yourusername/my-database-project.git'
+                echo "Cloning code from ${GIT_REPO_URL} (branch: ${BRANCH_NAME})"
+                git branch: "${BRANCH_NAME}", url: "${GIT_REPO_URL}"
             }
         }
 
-        stage('Liquibase Update') {
+        stage('Liquibase Status') {
             steps {
-                sh 'liquibase --defaultsFile=liquibase.properties update'
+                sh '''
+                $LIQUIBASE_HOME/liquibase \
+                  --classpath=$JDBC_DRIVER \
+                  --changeLogFile=$CHANGELOG_FILE \
+                  --url="$DB_URL" \
+                  --username="$DB_USER" \
+                  --password="$DB_PASSWORD" \
+                  status
+                '''
             }
         }
 
-        stage('Liquibase Rollback (Optional)') {
+        stage('Liquibase Update (Tables + Data)') {
             steps {
-                // Example: rollback last changeSet
-                // sh 'liquibase --defaultsFile=liquibase.properties rollbackCount 1'
+                sh '''
+                $LIQUIBASE_HOME/liquibase \
+                  --classpath=$JDBC_DRIVER \
+                  --changeLogFile=$CHANGELOG_FILE \
+                  --url="$DB_URL" \
+                  --username="$DB_USER" \
+                  --password="$DB_PASSWORD" \
+                  update
+                '''
             }
         }
     }
+
+    post {
+        success {
+            echo "✅ Database deployment completed successfully"
+        }
+        failure {
+            echo "❌ Database deployment failed"
+        }
+    }
 }
+
