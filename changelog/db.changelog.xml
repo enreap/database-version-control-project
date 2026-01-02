@@ -7,7 +7,7 @@
     <changeSet id="001-create-database1" author="dev">
         <sql>
             CREATE DATABASE IF NOT EXISTS database1;
-            CREATE USER IF NOT EXISTS 'database1'@'%' IDENTIFIED BY 'Db1@123';
+            CREATE USER IF NOT EXISTS 'database1'@'%' IDENTIFIED BY 'Db1@12345';
             GRANT ALL PRIVILEGES ON database1.* TO 'database1'@'%';
             FLUSH PRIVILEGES;
         </sql>
@@ -21,7 +21,7 @@
     <changeSet id="002-create-database2" author="dev">
         <sql>
             CREATE DATABASE IF NOT EXISTS database2;
-            CREATE USER IF NOT EXISTS 'database2'@'%' IDENTIFIED BY 'Db2@123';
+            CREATE USER IF NOT EXISTS 'database2'@'%' IDENTIFIED BY 'Db2@12345';
             GRANT ALL PRIVILEGES ON database2.* TO 'database2'@'%';
             FLUSH PRIVILEGES;
         </sql>
