@@ -4,7 +4,7 @@
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.21.xsd">
 
     <!-- Create db1 and user -->
-    <changeSet id="001-create-database1" author="dev">
+    <changeSet id="007-create-database1" author="dev">
         <sql>
             CREATE DATABASE IF NOT EXISTS database1;
             CREATE USER IF NOT EXISTS 'database1'@'%' IDENTIFIED BY 'Db1@12345';
@@ -18,7 +18,7 @@
     </changeSet>
 
     <!-- Create db2 and user -->
-    <changeSet id="002-create-database2" author="dev">
+    <changeSet id="008-create-database2" author="dev">
         <sql>
             CREATE DATABASE IF NOT EXISTS database2;
             CREATE USER IF NOT EXISTS 'database2'@'%' IDENTIFIED BY 'Db2@12345';
