@@ -13,7 +13,7 @@
         </sql>
         <rollback>
             DROP USER IF EXISTS 'database1'@'%';
-            DROP DATABASE IF EXISTS database11;
+            DROP DATABASE IF EXISTS database1;
         </rollback>
     </changeSet>
 
